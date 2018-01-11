@@ -16,22 +16,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.WindowConstants;
 
 
-public class VistaChatUDP extends JFrame{
+class VistaChatUDP extends JFrame{
     private ControladorChatUDP cc;
-    public JTextField tfUsuario,tfIP,tfPuerto;
-    private JLabel lUsuario,lIP,lPuerto;
-    private JButton bConectar, bDesconectar;
-    public JButton bEnviar;
-    public JTextArea taDisplay,taEntrada;
+    JTextField tfUsuario,tfIP,tfPuerto;
+    JButton bEnviar;
+    JTextArea taDisplay,taEntrada;
     private JPanel pSuperior,pInferior;
 
-    public VistaChatUDP(){
+    VistaChatUDP(){
         cc = new ControladorChatUDP(this);
         setTitle("Chat UDP");
         setSize(700,500);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         crearVentana();
 
@@ -41,6 +40,8 @@ public class VistaChatUDP extends JFrame{
     }
 
     private void crearPanelSuperior(){
+        JLabel lUsuario,lIP,lPuerto;
+        JButton bConectar, bDesconectar;
         pSuperior = new JPanel(new FlowLayout(FlowLayout.CENTER,5,2));
 
         lUsuario = new JLabel("Usuario: ");
