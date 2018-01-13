@@ -22,7 +22,7 @@ import javax.swing.WindowConstants;
 class VistaChatUDP extends JFrame{
     private ControladorChatUDP cc;
     JTextField tfUsuario,tfIP,tfPuerto;
-    JButton bEnviar;
+    JButton bEnviar,bConectar, bDesconectar;
     JTextArea taDisplay,taEntrada;
     private JPanel pSuperior,pInferior;
 
@@ -41,7 +41,6 @@ class VistaChatUDP extends JFrame{
 
     private void crearPanelSuperior(){
         JLabel lUsuario,lIP,lPuerto;
-        JButton bConectar, bDesconectar;
         pSuperior = new JPanel(new FlowLayout(FlowLayout.CENTER,5,2));
 
         lUsuario = new JLabel("Usuario: ");
@@ -57,6 +56,7 @@ class VistaChatUDP extends JFrame{
         bConectar.addActionListener(cc);
 
         bDesconectar = new JButton("Desconectar");
+        bDesconectar.setEnabled(false);
         bDesconectar.addActionListener(cc);
 
         pSuperior.add(lUsuario);
@@ -87,6 +87,7 @@ class VistaChatUDP extends JFrame{
         constraints.weightx=2;
 
         bEnviar = new JButton("Enviar");
+        bEnviar.setEnabled(false);
         bEnviar.addActionListener(cc);
         constraints.gridx=4;
         constraints.gridy=0;

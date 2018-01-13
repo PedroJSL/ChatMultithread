@@ -17,7 +17,7 @@ class ControladorChatUDP implements ActionListener {
     private String usuario;
     private String ip;
     private int puerto;
-    boolean conectado = false;
+    private boolean conectado = false;
 
     ControladorChatUDP(VistaChatUDP vs){
         this.vs = vs;
@@ -47,36 +47,64 @@ class ControladorChatUDP implements ActionListener {
             vs.tfUsuario.setEditable(false);
             vs.tfIP.setEditable(false);
             vs.tfPuerto.setEditable(false);
+            vs.bConectar.setEnabled(false);
+            vs.bDesconectar.setEnabled(true);
+            vs.bEnviar.setEnabled(true);
 
-            m=new MulticastSocket();
+            m=new MulticastSocket(puerto);
             grupo=InetAddress.getByName(ip);
-            //m.joinGroup(grupo);
+            m.joinGroup(grupo);
             conectado = true;
 
             new RecibirMensajes().start();
-
-            vs.taDisplay.append(getHora()+usuario+" acaba de crear el grupo: "+InetAddress.getLocalHost()+":"+m.getPort());
-            //enviarMensaje(getHora()+usuario+" se acaba de unir al grupo.");
+            enviarMensaje("se acaba de unir al grupo.");
 
 
         }catch (NumberFormatException e){
             JOptionPane.showMessageDialog(vs,"Puerto invalido.","Error",JOptionPane.ERROR_MESSAGE);
         }catch (IOException e){
-
+            System.out.println(e.getMessage());
         }
     }
 
     private void enviarMensaje(String msj){
+        String mensaje = getHora()+usuario+": "+msj;
         try {
-            DatagramPacket paquete=new DatagramPacket(msj.getBytes(), msj.length(), grupo, puerto);
+            DatagramPacket paquete=new DatagramPacket(mensaje.getBytes(), mensaje.length(), grupo, puerto);
             m.send(paquete);
         }catch (IOException e){
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
 
     }
 
     private void desconectarGrupo(){
+        enviarMensaje("se ha desconectado.");
+        try {
+            m.leaveGroup(grupo);
+            m.close();
+
+            conectado = false;
+            usuario ="";
+            ip ="";
+            puerto=0;
+            m=null;
+            grupo=null;
+
+            vs.tfUsuario.setText("");
+            vs.tfUsuario.setEditable(true);
+            vs.tfIP.setText("");
+            vs.tfIP.setEditable(true);
+            vs.tfPuerto.setText("");
+            vs.tfPuerto.setEditable(true);
+
+            vs.bConectar.setEnabled(true);
+            vs.bDesconectar.setEnabled(false);
+            vs.bEnviar.setEnabled(false);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
